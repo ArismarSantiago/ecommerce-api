@@ -2,7 +2,6 @@ package com.ecommerce.api.controller;
 
 import com.ecommerce.api.assembler.ProductAssembler;
 import com.ecommerce.api.dto.request.ProductRequest;
-import com.ecommerce.api.dto.response.CustomerResponse;
 import com.ecommerce.api.dto.response.ProductResponse;
 import com.ecommerce.api.service.ProductService;
 import jakarta.validation.Valid;
