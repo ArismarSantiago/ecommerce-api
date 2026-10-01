@@ -82,8 +82,8 @@ public interface ProductControllerDocs {
     @Operation(summary = "Insert Product", description = "Insert products",
             tags = "Insert product"
             , responses = {@ApiResponse(
-            description = "Success",
-            responseCode = "200",
+            description = "Created",
+            responseCode = "201",
             content = @Content(schema = @Schema(implementation = ProductResponse.class))),
 
             @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
@@ -93,4 +93,20 @@ public interface ProductControllerDocs {
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)})
     @PostMapping
     ResponseEntity<ProductResponse> insertProduct(@Valid @RequestBody ProductRequest request);
+
+
+    @Operation(summary = "Update Product", description = "Update products",
+            tags = "Update product"
+            , responses = {@ApiResponse(
+            description = "Success",
+            responseCode = "200",
+            content = @Content(schema = @Schema(implementation = ProductResponse.class))),
+
+            @ApiResponse(description = "No Content", responseCode = "204", content = @Content),
+            @ApiResponse(description = "Bad Request", responseCode = "400", content = @Content),
+            @ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+            @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+            @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)})
+    @PutMapping
+    ResponseEntity<ProductResponse> update(@Valid @RequestBody ProductRequest request, @PathVariable Long id);
 }

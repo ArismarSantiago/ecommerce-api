@@ -30,11 +30,13 @@ public class ProductMapper {
                 .build();
     }
 
-    public static void update(ProductRequest request){
+    public static Product update(ProductRequest request, Long id){
         Product entity = new Product();
         entity.setName(request.name());
         entity.setPrice(request.price());
         entity.setStock(request.stock());
         entity.setDescription(request.description());
+
+        return entity;
     }
 }

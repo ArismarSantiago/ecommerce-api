@@ -28,11 +28,12 @@ public class CustomerMapper {
               .address(entity.getAddress()).build();
     }
 
-    public static void update(CustomerRequest request){
+    public static Customer update(CustomerRequest request, Long id){
         Customer entity = new Customer();
         entity.setName(request.name());
         entity.setEmail(request.email());
         entity.setPhoneNumber(request.phoneNumber());
         entity.setAddress(request.address());
+        return entity;
     }
 }

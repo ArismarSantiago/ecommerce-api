@@ -1,6 +1,6 @@
 package com.ecommerce.api.exceptions.handler;
 
-import com.ecommerce.api.exceptions.DuplicateNameExceptions;
+import com.ecommerce.api.exceptions.DuplicateExceptions;
 import com.ecommerce.api.exceptions.NotFoundExceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -22,12 +22,12 @@ public class ExceptionsHandler {
         return problemDetail;
     }
 
-    @ExceptionHandler(DuplicateNameExceptions.class)
-    public ProblemDetail problemDetail (DuplicateNameExceptions ex){
+    @ExceptionHandler(DuplicateExceptions.class)
+    public ProblemDetail problemDetail (DuplicateExceptions ex){
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
 
         problemDetail.setTitle("esse nome ja existe cadastrado, verifique e tente novaamente");
-        problemDetail.setProperty("name", ex.getName());
+        problemDetail.setProperty("problem field", ex.getName());
         problemDetail.setProperty("problem cause", ex.getCause());
 
         return problemDetail;
