@@ -2,24 +2,23 @@ package com.ecommerce.api.assembler;
 
 import com.ecommerce.api.controller.CustomerController;
 import com.ecommerce.api.dto.response.CustomerResponse;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.RepresentationModelAssembler;
+import org.springframework.stereotype.Component;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-public class CustomerAssembler implements RepresentationModelAssembler<CustomerResponse, EntityModel<CustomerResponse>> {
-    @Override
-    public EntityModel<CustomerResponse> toModel(CustomerResponse response) {
-        return EntityModel.of(
-                response,
-                linkTo(methodOn(CustomerController.class).findAll()).withSelfRel(),
-                linkTo(methodOn(CustomerController.class).findById(response.id())).withRel("findById").withSelfRel(),
-                linkTo(methodOn(CustomerController.class).findByName(response.name())).withRel("findByName").withSelfRel(),
-                linkTo(methodOn(CustomerController.class).findByEmail(response.email())).withRel("findByEmail").withSelfRel(),
-                linkTo(methodOn(CustomerController.class).findByPhoneNumber(response.phoneNumber())).withRel("findByPhoneNumber").withSelfRel(),
-                linkTo(methodOn(CustomerController.class).insert(null)).withRel("Insert").withSelfRel(),
-                linkTo(methodOn(CustomerController.class).update(null, response.id())).withRel("Update").withSelfRel()
-        );
-    }
+@Component
+public class CustomerAssembler {
+
+
+    public void hateoasLinkCustomer(CustomerResponse response) {
+        var link = methodOn(CustomerController.class);
+        response.add(linkTo(link.findAll()).withRel("findAll").withType("GET"));
+        response.add(linkTo(link.findById(response.getId())).withRel("findById").withType("GET"));
+        response.add(linkTo(link.update(null, response.getId())).withRel("update").withType("PUT"));
+        response.add(linkTo(link.insert(null)).withRel("insert").withType("POST"));
+        response.add(linkTo(link.findByEmail(response.getEmail())).withRel("findByEmail").withType("GET"));
+        response.add(linkTo(link.findByPhoneNumber(response.getPhoneNumber())).withRel("findByPhoneNumber").withType("GET"));
+        response.add(linkTo(link.findByName(response.getName())).withRel("findByName").withType("GET"));
+           }
 }

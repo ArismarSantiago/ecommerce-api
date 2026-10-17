@@ -1,5 +1,5 @@
 package com.ecommerce.api.enums;
 
 public enum OrderStatus {
-    PENDING, COMPLETED, CANCELED
+    WAITING_PAYMENT,RETURNING, PROCESSING, PREPARING, IN_TRANSIT, SHIPPED, COMPLETED, CANCELED
 }

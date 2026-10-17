@@ -19,14 +19,16 @@ public class CategoryController implements com.ecommerce.api.controller.docs.Cat
 
     @Autowired
     private CategoryService service;
+
     @Autowired
     private CategoryAssembler assembler;
+
 
     @GetMapping
     @Override
     public ResponseEntity<List<CategoryResponse>> findAll(){
         List<CategoryResponse> list = service.findAll();
-        list.forEach(assembler::toModel);
+      list.forEach(assembler::hateoasLinkCategory);
         return ResponseEntity.ok(list);
     }
 
@@ -34,7 +36,7 @@ public class CategoryController implements com.ecommerce.api.controller.docs.Cat
     @Override
     public ResponseEntity<CategoryResponse> findByName(@RequestParam(name = "name") String name){
         CategoryResponse response = service.findByName(name);
-        assembler.toModel(response);
+        assembler.hateoasLinkCategory(response);
         return ResponseEntity.ok(response);
     }
 
@@ -43,21 +45,21 @@ public class CategoryController implements com.ecommerce.api.controller.docs.Cat
     @Override
     public ResponseEntity<CategoryResponse> findById(@PathVariable Long id){
         CategoryResponse response = service.findById(id);
-        assembler.toModel(response);
+        assembler.hateoasLinkCategory(response);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
     @Override
-    public ResponseEntity<CategoryResponse> insert(CategoryRequest request){
+    public ResponseEntity<CategoryResponse> insert(@Valid @RequestBody CategoryRequest request){
         CategoryResponse response = service.insert(request);
 
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(response.id())
+                .buildAndExpand(response.getId())
                 .toUri();
-        assembler.toModel(response);
+        assembler.hateoasLinkCategory(response);
         return ResponseEntity.created(uri).body(response);
     }
 
@@ -65,7 +67,7 @@ public class CategoryController implements com.ecommerce.api.controller.docs.Cat
     @Override
     public ResponseEntity<CategoryResponse> update(@Valid @RequestBody CategoryRequest request, @PathVariable Long id){
         CategoryResponse response = service.update(request, id);
-        assembler.toModel(response);
+        assembler.hateoasLinkCategory(response);
         return ResponseEntity.ok(response);
     }
 }

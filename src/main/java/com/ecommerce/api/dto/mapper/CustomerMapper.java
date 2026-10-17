@@ -1,39 +1,28 @@
 package com.ecommerce.api.dto.mapper;
 
+import com.ecommerce.api.dto.request.AddressRequest;
 import com.ecommerce.api.dto.request.CustomerRequest;
 import com.ecommerce.api.dto.response.CustomerResponse;
+import com.ecommerce.api.dto.updateRequest.CustomerUpdateRequest;
 import com.ecommerce.api.entity.Customer;
-import org.springframework.stereotype.Component;
+import com.ecommerce.api.valueObject.Address;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Component
-public class CustomerMapper {
+@Mapper(componentModel = "spring")
+public interface CustomerMapper {
+
+    Customer toEntity(CustomerRequest request);
+
+    CustomerResponse toResponse(Customer customer);
 
 
-    public static Customer toEntity(CustomerRequest request){
-        Customer entity = new Customer();
-        entity.setName(request.name());
-        entity.setEmail(request.email());
-        entity.setPhoneNumber(request.phoneNumber());
-        entity.setAddress(request.address());
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Customer updateCustomer (CustomerUpdateRequest request, @MappingTarget Customer customer);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    Address map(AddressRequest value);
 
-        return entity;
-    }
-    public static CustomerResponse toResponse(Customer entity){
-      return CustomerResponse.builder()
-              .id(entity.getId())
-              .name(entity.getName())
-              .email(entity.getEmail())
-              .phoneNumber(entity.getPhoneNumber())
-              .address(entity.getAddress()).build();
-    }
-
-    public static Customer update(CustomerRequest request, Long id){
-        Customer entity = new Customer();
-        entity.setName(request.name());
-        entity.setEmail(request.email());
-        entity.setPhoneNumber(request.phoneNumber());
-        entity.setAddress(request.address());
-        return entity;
-    }
 }

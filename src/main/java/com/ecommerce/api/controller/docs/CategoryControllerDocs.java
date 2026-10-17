@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface CategoryControllerDocs {
     @Operation(summary = "find all category", description = "find all category"
-            , tags = "findAll category",
+            , tags = "category",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -59,7 +59,7 @@ public interface CategoryControllerDocs {
     ResponseEntity<CategoryResponse> findById(@PathVariable Long id);
 
     @Operation(summary = "Insert Category", description = "Insert a new category",
-            tags = "insert category"
+            tags = "category"
             , responses = {@ApiResponse(
             description = "Created",
             responseCode = "201",
@@ -74,7 +74,7 @@ public interface CategoryControllerDocs {
     ResponseEntity<CategoryResponse> insert(CategoryRequest request);
 
     @Operation(summary = "Update category", description = "update category",
-            tags = "update category"
+            tags = "category"
             , responses = {@ApiResponse(
             description = "success",
             responseCode = "200",

@@ -1,11 +1,15 @@
 package com.ecommerce.api.exceptions.handler;
 
+import com.ecommerce.api.entity.Product;
 import com.ecommerce.api.exceptions.DuplicateExceptions;
 import com.ecommerce.api.exceptions.NotFoundExceptions;
+import com.ecommerce.api.exceptions.ProductNotAvailable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@RestControllerAdvice
 public class ExceptionsHandler {
 
 
@@ -32,4 +36,16 @@ public class ExceptionsHandler {
 
         return problemDetail;
     }
+
+    @ExceptionHandler(ProductNotAvailable.class)
+    public ProblemDetail problemDetail(ProductNotAvailable ex){
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage());
+
+        problemDetail.setTitle("product not available " + ex.getProduct().getName());
+        problemDetail.setProperty("product status ", ex.getProduct().getStatus());
+        problemDetail.setProperty("product stock ", ex.getProduct().getStock());
+
+        return problemDetail;
+    }
+
 }

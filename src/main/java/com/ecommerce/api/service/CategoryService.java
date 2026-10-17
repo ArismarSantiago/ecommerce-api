@@ -17,10 +17,12 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository repository;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     public List<CategoryResponse> findAll(){
         return repository.findAll().stream()
-                .map(CategoryMapper::toResponse).toList();
+                .map(categoryMapper::toResponse).toList();
     }
 
     public Category findByEntityId(Long id){
@@ -31,7 +33,7 @@ public class CategoryService {
     public CategoryResponse findById(Long id){
         Category category = findByEntityId(id);
 
-        return CategoryMapper.toResponse(category);
+        return categoryMapper.toResponse(category);
     }
 
     public CategoryResponse findByName(String name){
@@ -39,7 +41,7 @@ public class CategoryService {
         if (category == null){
             throw new NotFoundExceptions("Nome não localizado",name, "Category");
         }
-        return CategoryMapper.toResponse(category);
+        return categoryMapper.toResponse(category);
     }
 
     public CategoryResponse update(CategoryRequest request, Long id){
@@ -47,17 +49,17 @@ public class CategoryService {
         if (repository.existsByName(request.name()) && !request.name().trim().equals(entity.getName().trim())){
             throw new DuplicateExceptions("Essa categoria já se encontra cadastrada", request.name());
         }
-        Category updated = CategoryMapper.update(request, id);
+        Category updated = categoryMapper.updateCategory(request);
         Category saveUpdate = repository.save(updated);
-        return CategoryMapper.toResponse(saveUpdate);
+        return categoryMapper.toResponse(saveUpdate);
     }
 
     public CategoryResponse insert(CategoryRequest request){
         if (repository.existsByName(request.name())){
             throw new DuplicateExceptions("Essa categoria ja existe", request.name());
         }
-        Category entity = CategoryMapper.toEntity(request);
+        Category entity = categoryMapper.toEntity(request);
         Category saveEntity = repository.save(entity);
-        return CategoryMapper.toResponse(saveEntity);
+        return categoryMapper.toResponse(saveEntity);
     }
 }

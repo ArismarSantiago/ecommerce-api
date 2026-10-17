@@ -1,5 +1,5 @@
 package com.ecommerce.api.enums;
 
 public enum PaymentStatus {
-    COMPLETED, PENDING, CANCELED
+    PAID, COMPLETED, REFUND_PROCESSING, PENDING, CANCELED
 }

@@ -3,6 +3,7 @@ package com.ecommerce.api.controller;
 import com.ecommerce.api.assembler.CustomerAssembler;
 import com.ecommerce.api.dto.request.CustomerRequest;
 import com.ecommerce.api.dto.response.CustomerResponse;
+import com.ecommerce.api.dto.updateRequest.CustomerUpdateRequest;
 import com.ecommerce.api.service.CustomerService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +20,16 @@ public class CustomerController implements com.ecommerce.api.controller.docs.Cus
 
     @Autowired
     private CustomerService service;
+
     @Autowired
     private CustomerAssembler assembler;
+
 
     @GetMapping
     @Override
     public ResponseEntity<List<CustomerResponse>> findAll(){
         List<CustomerResponse> list = service.findAll();
-        list.forEach(assembler::toModel);
+        list.forEach(assembler::hateoasLinkCustomer);
         return ResponseEntity.ok(list);
     }
 
@@ -34,7 +37,7 @@ public class CustomerController implements com.ecommerce.api.controller.docs.Cus
     @Override
     public ResponseEntity<CustomerResponse> findById(@PathVariable Long id){
         CustomerResponse response = service.findById(id);
-        assembler.toModel(response);
+        assembler.hateoasLinkCustomer(response);
         return ResponseEntity.ok(response);
     }
 
@@ -43,7 +46,7 @@ public class CustomerController implements com.ecommerce.api.controller.docs.Cus
     @Override
     public ResponseEntity<List<CustomerResponse>> findByName(@RequestParam(name = "name") String name){
         List<CustomerResponse> list = service.findByName(name);
-        list.forEach(assembler::toModel);
+        list.forEach(assembler::hateoasLinkCustomer);
         return ResponseEntity.ok(list);
     }
 
@@ -52,7 +55,7 @@ public class CustomerController implements com.ecommerce.api.controller.docs.Cus
     @Override
     public ResponseEntity<CustomerResponse> findByEmail(@RequestParam(name = "email") String email){
         CustomerResponse response = service.findByEmail(email);
-        assembler.toModel(response);
+       assembler.hateoasLinkCustomer(response);
         return ResponseEntity.ok(response);
     }
 
@@ -62,7 +65,7 @@ public class CustomerController implements com.ecommerce.api.controller.docs.Cus
     @Override
     public ResponseEntity<List<CustomerResponse>> findByPhoneNumber(@RequestParam(name = "phoneNumber") String phoneNumber){
         List<CustomerResponse> list = service.findByPhoneNumber(phoneNumber);
-        list.forEach(assembler::toModel);
+        list.forEach(assembler::hateoasLinkCustomer);
         return ResponseEntity.ok(list);
     }
 
@@ -70,22 +73,22 @@ public class CustomerController implements com.ecommerce.api.controller.docs.Cus
 
     @PostMapping
     @Override
-    public ResponseEntity<CustomerResponse> insert(CustomerRequest request){
+    public ResponseEntity<CustomerResponse> insert(@Valid @RequestBody CustomerRequest request){
         CustomerResponse response = service.insert(request);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(response.id())
+                .buildAndExpand(response.getId())
                 .toUri();
-        assembler.toModel(response);
+        assembler.hateoasLinkCustomer(response);
         return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping("/{id}")
     @Override
-    public ResponseEntity<CustomerResponse> update(@Valid @RequestBody CustomerRequest request, @PathVariable Long id){
+    public ResponseEntity<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest request, @PathVariable Long id){
         CustomerResponse response = service.update(request, id);
-        assembler.toModel(response);
+        assembler.hateoasLinkCustomer(response);
         return ResponseEntity.ok(response);
     }
 

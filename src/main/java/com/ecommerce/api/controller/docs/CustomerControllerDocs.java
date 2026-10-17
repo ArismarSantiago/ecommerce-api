@@ -2,6 +2,7 @@ package com.ecommerce.api.controller.docs;
 
 import com.ecommerce.api.dto.request.CustomerRequest;
 import com.ecommerce.api.dto.response.CustomerResponse;
+import com.ecommerce.api.dto.updateRequest.CustomerUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +15,7 @@ import java.util.List;
 
 public interface CustomerControllerDocs {
     @Operation(summary = "Find customer by id", description = "Find a specific customer using id",
-            tags = "find customer by id",
+            tags = "customer",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -29,7 +30,7 @@ public interface CustomerControllerDocs {
     ResponseEntity<CustomerResponse> findById(@PathVariable Long id);
 
     @Operation(summary = "Find all customers", description = "Find all customers",
-            tags = "find all customers",
+            tags = "customer",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -44,7 +45,7 @@ public interface CustomerControllerDocs {
     ResponseEntity<List<CustomerResponse>> findAll();
 
     @Operation(summary = "Find customers by name", description = "Find all customers using name",
-            tags = "find customer by name",
+            tags = "customer",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -59,7 +60,7 @@ public interface CustomerControllerDocs {
     ResponseEntity<List<CustomerResponse>> findByName(@RequestParam(name = "name") String name);
 
     @Operation(summary = "Find customer by email", description = "Find a specific customer using email",
-            tags = "find customer by email",
+            tags = "customer",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -74,7 +75,7 @@ public interface CustomerControllerDocs {
     ResponseEntity<CustomerResponse> findByEmail(@RequestParam(name = "email") String email);
 
     @Operation(summary = "Find customer by PhoneNumber", description = "Find customers using PhoneNumber",
-            tags = "find customer by phoneNumber",
+            tags = "customer",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -89,7 +90,7 @@ public interface CustomerControllerDocs {
     ResponseEntity<List<CustomerResponse>> findByPhoneNumber(@RequestParam(name = "phoneNumber") String phoneNumber);
 
     @Operation(summary = "Insert customer", description = "Insert a new Customer in database",
-            tags = "insert customers",
+            tags = "customer",
             responses = {@ApiResponse(
                     description = "Created",
                     responseCode = "201",
@@ -108,7 +109,7 @@ public interface CustomerControllerDocs {
 
 
     @Operation(summary = "Update customer", description = "Update data for customers",
-            tags = "update customers",
+            tags = "customer",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -120,5 +121,5 @@ public interface CustomerControllerDocs {
                     @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
                     @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)})
     @PutMapping("/{id}")
-    ResponseEntity<CustomerResponse> update(@Valid @RequestBody CustomerRequest request, @PathVariable Long id);
+    ResponseEntity<CustomerResponse> update(@Valid @RequestBody CustomerUpdateRequest request, @PathVariable Long id);
 }

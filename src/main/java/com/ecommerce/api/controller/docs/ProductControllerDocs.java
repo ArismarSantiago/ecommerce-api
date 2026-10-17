@@ -1,6 +1,7 @@
 package com.ecommerce.api.controller.docs;
 
 import com.ecommerce.api.dto.request.ProductRequest;
+import com.ecommerce.api.dto.request.updateRequest.ProductUpdateRequest;
 import com.ecommerce.api.dto.response.ProductResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,7 +18,7 @@ public interface ProductControllerDocs {
     @Operation(
             summary = "Find All products",
             description = "Find all products added in database",
-            tags = "Find All Products",
+            tags = "product",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -34,7 +35,7 @@ public interface ProductControllerDocs {
     @Operation(
             summary = "Find By Id product",
             description = "Find a specific product by id",
-            tags = "findById product",
+            tags = "product",
             responses = {@ApiResponse(
                     description = "Success",
                     responseCode = "200",
@@ -49,7 +50,7 @@ public interface ProductControllerDocs {
     ResponseEntity<ProductResponse> findById(@PathVariable Long id);
 
     @Operation(summary = "Find By Name Product", description = "Find Product Using Name",
-            tags = "find by name product"
+            tags = "product"
             , responses = {@ApiResponse(
             description = "Success",
             responseCode = "200",
@@ -64,7 +65,7 @@ public interface ProductControllerDocs {
     ResponseEntity<List<ProductResponse>> findByName(@RequestParam String name);
 
     @Operation(summary = "Find product by price", description = "Find products using the starting price and the ending price.",
-            tags = "find by price product"
+            tags = "product"
             , responses = {@ApiResponse(
             description = "Success",
             responseCode = "200",
@@ -80,7 +81,7 @@ public interface ProductControllerDocs {
             @RequestParam(name = "price") BigDecimal price, @RequestParam(name = "priceFinal") BigDecimal priceFinal);
 
     @Operation(summary = "Insert Product", description = "Insert products",
-            tags = "Insert product"
+            tags = "product"
             , responses = {@ApiResponse(
             description = "Created",
             responseCode = "201",
@@ -96,7 +97,7 @@ public interface ProductControllerDocs {
 
 
     @Operation(summary = "Update Product", description = "Update products",
-            tags = "Update product"
+            tags = "product"
             , responses = {@ApiResponse(
             description = "Success",
             responseCode = "200",
@@ -108,5 +109,7 @@ public interface ProductControllerDocs {
             @ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
             @ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)})
     @PutMapping
-    ResponseEntity<ProductResponse> update(@Valid @RequestBody ProductRequest request, @PathVariable Long id);
+    ResponseEntity<ProductResponse> update(@Valid @RequestBody ProductUpdateRequest request , @PathVariable Long id);
 }
+
+

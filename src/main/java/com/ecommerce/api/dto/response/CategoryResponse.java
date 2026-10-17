@@ -1,10 +1,14 @@
 package com.ecommerce.api.dto.response;
 
-import lombok.Builder;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @Builder
-public record CategoryResponse(
-        Long id,
-        String name
-) {
+public class CategoryResponse extends RepresentationModel<CategoryResponse> {
+       private Long id;
+        private String name;
 }

@@ -1,14 +1,19 @@
 package com.ecommerce.api.dto.response;
 
 import com.ecommerce.api.valueObject.Address;
-import lombok.Builder;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @Builder
-public record CustomerResponse(
-        Long id,
-        String name,
-        String email,
-        String phoneNumber,
-        Address address
-) {
+public class CustomerResponse extends RepresentationModel<CustomerResponse> {
+    private  Long id;
+    private String name;
+    private String email;
+    private String phoneNumber;
+    private Address address;
+
 }

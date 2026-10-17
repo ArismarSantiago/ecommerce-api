@@ -1,5 +1,6 @@
 package com.ecommerce.api.entity;
 
+import com.ecommerce.api.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 @Entity(name = "products_tb")
 public class Product {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false, unique = true, length = 250)
@@ -23,6 +25,12 @@ public class Product {
     private BigDecimal price;
     @Column(nullable = false, length = 3)
     private Integer stock;
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
 
+
+    @ManyToOne
+    @JoinColumn(name = "products_id")
+    private Category category;
 
 }
