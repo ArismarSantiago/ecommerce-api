@@ -1,5 +1,6 @@
 package com.ecommerce.api.entity;
 
+import com.ecommerce.api.enums.OrderItemStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,9 @@ public class OrderItem {
     @Column(nullable = false)
     @Setter
     private BigDecimal subTotal;
+    @Enumerated(EnumType.STRING)
+    @Setter
+    private OrderItemStatus status;
 
 
     public OrderItem(Long id, Integer quantity, BigDecimal unitPrice, BigDecimal subTotal, Order order, Product product) {

@@ -13,11 +13,11 @@ public interface OrderItemsMapper {
 
     OrderItem toEntity(OrderItemRequest request);
 
-  //  OrderItem toEntity(OrderItemRequest request, OrderItem item);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "unitPrice", source = "product.price")
     @Mapping(target = "product", source = "product")
+    @Mapping(target = "status", ignore = true)
     OrderItem toEntity(OrderItemRequest request, Product product);
 
     OrderItemResponse toResponse(OrderItem orderItem);

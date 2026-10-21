@@ -2,6 +2,7 @@ package com.ecommerce.api.methodsUse;
 
 import com.ecommerce.api.entity.Order;
 import com.ecommerce.api.entity.Shipping;
+import com.ecommerce.api.enums.OrderItemStatus;
 import com.ecommerce.api.enums.OrderStatus;
 import com.ecommerce.api.events.OnChangeStatusShipping;
 import com.ecommerce.api.repository.OrderRepository;
@@ -14,6 +15,11 @@ public class ChangeStatusByShipping {
 
     @Autowired
     private OrderRepository orderRepository;
+    private final ChanceProductStockByOrder chanceProductStockByOrder;
+
+    public ChangeStatusByShipping(ChanceProductStockByOrder chanceProductStockByOrder) {
+        this.chanceProductStockByOrder = chanceProductStockByOrder;
+    }
 
 
     @EventListener
@@ -35,6 +41,8 @@ public class ChangeStatusByShipping {
             }
             case CANCELED -> {
                 order.setStatus(OrderStatus.CANCELED);
+                order.getOrderItems().forEach(c -> c.setStatus(OrderItemStatus.CANCELED));
+                chanceProductStockByOrder.returnProductQuantityStock(order.getOrderItems());
             }
         }
         orderRepository.save(order);

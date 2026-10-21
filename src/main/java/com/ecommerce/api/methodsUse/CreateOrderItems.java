@@ -6,6 +6,7 @@ import com.ecommerce.api.dto.request.OrderRequest;
 import com.ecommerce.api.entity.Order;
 import com.ecommerce.api.entity.OrderItem;
 import com.ecommerce.api.entity.Product;
+import com.ecommerce.api.enums.OrderItemStatus;
 import com.ecommerce.api.exceptions.NotFoundExceptions;
 import com.ecommerce.api.repository.OrderItemRepository;
 import com.ecommerce.api.repository.ProductRepository;
@@ -39,8 +40,9 @@ public class CreateOrderItems {
         List<OrderItem> items = new ArrayList<>();
         for(OrderItemRequest c: request.items()){
             Product product = findProduct(c.productId());
-            changeStock.ChangeStockProducts(product, c.quantity());
+            changeStock.ChangeStockProductsOrder(product, c.quantity());
             OrderItem item = orderItemsMapper.toEntity(c, product);
+            item.setStatus(OrderItemStatus.WAITING_PAYMENT);
             item.setSubTotal(product.getPrice().multiply(BigDecimal.valueOf(c.quantity())));
             items.add(item);
         }
