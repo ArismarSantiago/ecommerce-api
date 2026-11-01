@@ -4,6 +4,7 @@ package com.ecommerce.api.createDataFake;
 import com.ecommerce.api.dto.request.CategoryRequest;
 import com.ecommerce.api.entity.Category;
 import com.ecommerce.api.entity.Product;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,10 @@ public class CategoryDataFake {
 
     public static Category createFackCategory(int i){
         Category category = new Category();
-        category.setId(Long.valueOf(i));
+        ReflectionTestUtils.setField(category, "id", Long.valueOf(i));
         category.setName(String.valueOf("CategoryName" + i));
 
-        category.setProducts(ProductsFakeData.listFakeProducts(i));
+        category.getProducts().forEach(ProductsFakeData.listFakeProducts(3)::add);
 
         return category;
     }

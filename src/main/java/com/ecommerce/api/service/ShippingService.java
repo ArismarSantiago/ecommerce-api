@@ -6,6 +6,7 @@ import com.ecommerce.api.dto.response.ShippingResponse;
 import com.ecommerce.api.entity.Shipping;
 import com.ecommerce.api.events.OnChangeStatusShipping;
 import com.ecommerce.api.exceptions.DuplicateExceptions;
+import com.ecommerce.api.exceptions.NotExistTrackingCode;
 import com.ecommerce.api.exceptions.NotFoundExceptions;
 import com.ecommerce.api.repository.ShippingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,14 @@ public class ShippingService {
     public ApplicationEventPublisher publisher;
 
     @Autowired
-    private ShippingMapper shippingMapper;
+    private ShippingMapper mapper;
 
 
 
 
     public List<ShippingResponse> findAll(){
         return repository.findAll().stream()
-                .map(shippingMapper::toResponse)
+                .map(mapper::toResponse)
                 .toList();
     }
 
@@ -48,17 +49,20 @@ public class ShippingService {
 
     public ShippingResponse findById(Long id){
         Shipping shipping = findByEntityId(id);
-        return shippingMapper.toResponse(shipping);
+        return mapper.toResponse(shipping);
     }
     public ShippingResponse findByTrackingCode(String trackingCode){
         Shipping shipping = repository.findByTrackingCode(trackingCode);
-        return shippingMapper.toResponse(shipping);
+        if (shipping == null){
+            throw new NotExistTrackingCode("não localizamos esse codigo de rastreamento", trackingCode);
+        }
+        return mapper.toResponse(shipping);
     }
     public List<ShippingResponse> findByShippedAtBetween(LocalDate date){
         LocalDateTime dateIni = date.atStartOfDay();
         LocalDateTime dateFin = date.atTime(LocalTime.MAX);
         return repository.findByShippedAtBetween(dateIni, dateFin)
-                .stream().map(shippingMapper::toResponse).toList();
+                .stream().map(mapper::toResponse).toList();
 
     }
 
@@ -71,7 +75,7 @@ public class ShippingService {
         repository.save(shipping);
         OnChangeStatusShipping statusShipping = new OnChangeStatusShipping(shipping);
         publisher.publishEvent(statusShipping);
-        return shippingMapper.toResponse(shipping);
+        return mapper.toResponse(shipping);
     }
 
 }

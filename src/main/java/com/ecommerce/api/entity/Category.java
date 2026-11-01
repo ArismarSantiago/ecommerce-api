@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @AllArgsConstructor
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -16,6 +15,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Setter
     @Column(nullable = false, length = 200, unique = true)
     private String name;
 

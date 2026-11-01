@@ -5,6 +5,7 @@ import com.ecommerce.api.dto.request.updateRequest.ShippingStatusUpdateRequest;
 import com.ecommerce.api.entity.Shipping;
 import com.ecommerce.api.enums.ShippingStatus;
 import com.ecommerce.api.valueObject.Address;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,10 +15,10 @@ public class ShippingFakeData {
 
     public static Shipping shippingFake(int i){
         Shipping shipping = new Shipping();
-        shipping.setStatus(ShippingStatus.WAITING_PAYMENT);
-        shipping.setShippedAt(LocalDateTime.now());
-        shipping.setId(Long.valueOf(i));
-        shipping.setTrackingCode(i+"101010"+i);
+        ReflectionTestUtils.setField(shipping, "id", Long.valueOf(i));
+        ReflectionTestUtils.setField(shipping, "shippedAt", LocalDateTime.of(2022, 10,10,10,10));
+        shipping.setStatus(ShippingStatus.SHIPPED);
+        shipping.setTrackingCode(i+"101010");
         shipping.setAddress(new Address("street"+i, "number"+i,
                 "neighborhood"+i, "city"+i,
                 "state"+i, "zipCode"+i));
@@ -33,11 +34,13 @@ public class ShippingFakeData {
         return list;
     }
 
-    public static ShippingRequest requestFake(Shipping shipping){
-        return new ShippingRequest(shipping.getAddress());
+    public static ShippingRequest requestFake(){
+        return new ShippingRequest(new Address("street", "number",
+                "neighborhood", "city",
+                "state", "zipCode"));
     }
 
-    public static ShippingStatusUpdateRequest shippingStatusUpdateRequestFake(Shipping shipping, ShippingStatus status){
-        return new ShippingStatusUpdateRequest(shipping.getId(), status);
+    public static ShippingStatusUpdateRequest shippingStatusUpdateRequestFake(Long id, ShippingStatus status){
+        return new ShippingStatusUpdateRequest(id, status);
     }
 }

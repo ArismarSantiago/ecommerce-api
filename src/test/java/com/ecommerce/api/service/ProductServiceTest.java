@@ -105,7 +105,7 @@ class ProductServiceTest {
     void update() {
         Product product = ProductsFakeData.productFake(1);
         Product productUpdated = ProductsFakeData.productFake(2);
-        productUpdated.setId(product.getId());
+        ReflectionTestUtils.setField(productUpdated, "id", 1L);
         ProductUpdateRequest request = ProductsFakeData.productUpdateFake(productUpdated);
 
         when(repository.findById(1L)).thenReturn(Optional.of(product));

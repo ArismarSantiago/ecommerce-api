@@ -2,6 +2,7 @@ package com.ecommerce.api.exceptions.handler;
 
 import com.ecommerce.api.entity.Product;
 import com.ecommerce.api.exceptions.DuplicateExceptions;
+import com.ecommerce.api.exceptions.NotExistTrackingCode;
 import com.ecommerce.api.exceptions.NotFoundExceptions;
 import com.ecommerce.api.exceptions.ProductNotAvailable;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,15 @@ public class ExceptionsHandler {
         problemDetail.setTitle("product not available " + ex.getProduct().getName());
         problemDetail.setProperty("product status ", ex.getProduct().getStatus());
         problemDetail.setProperty("product stock ", ex.getProduct().getStock());
+
+        return problemDetail;
+    }
+
+    @ExceptionHandler(NotExistTrackingCode.class)
+    public ProblemDetail problemDetail(NotExistTrackingCode ex){
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+
+        problemDetail.setProperty("TrackingCode", ex.getTrackingCode());
 
         return problemDetail;
     }

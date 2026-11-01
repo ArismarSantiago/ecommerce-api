@@ -4,6 +4,7 @@ import com.ecommerce.api.createDataFake.*;
 import com.ecommerce.api.dto.mapper.CustomerMapper;
 import com.ecommerce.api.dto.request.CustomerRequest;
 import com.ecommerce.api.dto.response.CustomerResponse;
+import com.ecommerce.api.dto.updateRequest.CustomerUpdateRequest;
 import com.ecommerce.api.entity.Customer;
 import com.ecommerce.api.entity.Order;
 import com.ecommerce.api.repository.CustomerRepository;
@@ -21,8 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -78,6 +78,21 @@ public class CustomerServiceTest {
 
     @Test
     void updateCustomer(){
+        Customer customer = CustomerFakeData.customerFake(1);
+        Customer updated = CustomerFakeData.customerFake(2);
+        CustomerUpdateRequest requestUpdate = CustomerFakeData.requestUpdateFake(updated);
+        ReflectionTestUtils.setField(updated, "id", 1L);
+        when(repository.findById(1L)).thenReturn(Optional.of(customer));
+        when(repository.save(any())).thenReturn(updated);
+
+        CustomerResponse response = service.update(requestUpdate, 1L);
+
+        assertNotNull(response);
+        assertNotEquals(customer.getName(), response.getName());
+        assertEquals(updated.getName(), response.getName());
+        verify(repository, times(1)).save(any());
+        verify(repository, times(1)).findById(anyLong());
+
 
     }
 }

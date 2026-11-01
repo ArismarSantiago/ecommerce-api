@@ -57,7 +57,7 @@ public class PaymentService {
         }
         Payment updated = mapper.updatePaymentStatus(request);
         repository.save(updated);
-        OnPaymentEvent event = new OnPaymentEvent(entity);
+        OnPaymentEvent event = new OnPaymentEvent(updated);
         publisher.publishEvent(event);
         return mapper.toResponse(updated);
     }

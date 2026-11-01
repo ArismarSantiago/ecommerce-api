@@ -4,6 +4,7 @@ import com.ecommerce.api.dto.request.OrderItemRequest;
 import com.ecommerce.api.entity.Order;
 import com.ecommerce.api.entity.OrderItem;
 import com.ecommerce.api.enums.OrderItemStatus;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class OrderItemsFakeData {
 
     public static OrderItem orderItemFake(int i) {
         OrderItem orderItem = new OrderItem();
+        ReflectionTestUtils.setField(orderItem, "id", Long.valueOf(i));
         orderItem.setStatus(OrderItemStatus.WAITING_PAYMENT);
         orderItem.setProduct(ProductsFakeData.productFake(i));
         orderItem.setQuantity(10);

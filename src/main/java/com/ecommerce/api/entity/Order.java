@@ -17,7 +17,6 @@ import java.util.List;
 @Entity(name = "order_tb")
 public class Order {
 
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

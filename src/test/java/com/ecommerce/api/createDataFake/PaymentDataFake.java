@@ -4,6 +4,7 @@ import com.ecommerce.api.dto.request.PaymentRequest;
 import com.ecommerce.api.entity.Order;
 import com.ecommerce.api.entity.Payment;
 import com.ecommerce.api.enums.PaymentStatus;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class PaymentDataFake {
 
     public static Payment paymentFake(int i){
         Payment payment = new Payment();
+        ReflectionTestUtils.setField(payment, "id", Long.valueOf(i));
         payment.setStatus(PaymentStatus.PENDING);
         payment.setAmount(BigDecimal.valueOf(200));
 

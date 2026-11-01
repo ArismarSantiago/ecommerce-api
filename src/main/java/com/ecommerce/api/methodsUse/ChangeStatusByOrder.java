@@ -18,11 +18,6 @@ import org.springframework.stereotype.Component;
 public class ChangeStatusByOrder {
 
 
-    @Autowired
-    private PaymentRepository paymentRepository;
-
-    @Autowired
-    private ShippingRepository shippingRepository;
 
     @Autowired
     private OrderRepository repository;

@@ -6,10 +6,13 @@ import com.ecommerce.api.enums.OrderItemStatus;
 import com.ecommerce.api.enums.OrderStatus;
 import com.ecommerce.api.enums.ShippingStatus;
 import com.ecommerce.api.events.OnPaymentEvent;
+import com.ecommerce.api.exceptions.NotFoundExceptions;
 import com.ecommerce.api.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Random;
 
 @Component
 public class ChangeStatusByPayment {
@@ -20,6 +23,11 @@ public class ChangeStatusByPayment {
 
     public ChangeStatusByPayment(ChanceProductStockByOrder chanceProductStockByOrder) {
         this.chanceProductStockByOrder = chanceProductStockByOrder;
+    }
+
+    public String createTrackingCode(Long id){
+        Random random = new Random();
+        return  String.valueOf(id) + random.nextInt(10);
     }
 
 
@@ -37,10 +45,14 @@ public class ChangeStatusByPayment {
             case PAID -> {
                 order.getShipping().setStatus(ShippingStatus.PENDING);
                 order.setStatus(OrderStatus.PROCESSING);
+                order.getShipping().setTrackingCode(createTrackingCode(order.getShipping().getId()));
             }
             case REFUND_PROCESSING -> {
                 order.getShipping().setStatus(ShippingStatus.RETURNING);
                 order.setStatus(OrderStatus.RETURNING);
+            }
+            case null, default -> {
+                throw new NotFoundExceptions("Status precisar conter algum valor", String.valueOf(event.payment().getStatus()), "PaymentStatus");
             }
         }
         repository.save(order);

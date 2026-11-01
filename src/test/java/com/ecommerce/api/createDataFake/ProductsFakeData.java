@@ -6,6 +6,7 @@ import com.ecommerce.api.dto.response.ProductResponse;
 import com.ecommerce.api.entity.Category;
 import com.ecommerce.api.entity.Product;
 import com.ecommerce.api.enums.ProductStatus;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class ProductsFakeData {
     public static Product productFake(int i){
         Product product = new Product();
 
-        product.setId(Long.valueOf(i));
+        ReflectionTestUtils.setField(product, "id", Long.valueOf(i));
         product.setName(String.valueOf(i + "name"));
         product.setPrice(BigDecimal.valueOf(25));
         product.setDescription("description");

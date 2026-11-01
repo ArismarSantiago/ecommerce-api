@@ -1,17 +1,17 @@
 package com.ecommerce.api.controller;
 
 import com.ecommerce.api.assembler.ShippingAssembler;
-import com.ecommerce.api.dto.response.OrderItemResponse;
 import com.ecommerce.api.dto.response.ShippingResponse;
 import com.ecommerce.api.service.ShippingService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import com.ecommerce.api.dto.request.updateRequest.ShippingStatusUpdateRequest;
+
+
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -47,6 +47,20 @@ public class ShippingController implements com.ecommerce.api.controller.docs.Shi
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{date}")
+    @Override
+    public ResponseEntity<List<ShippingResponse>> shippedAtBetween(@RequestParam(name = "date")LocalDate date){
+        List<ShippingResponse> responses = service.findByShippedAtBetween(date);
+        return ResponseEntity.ok(responses);
+    }
+
+    @PutMapping("update/{id}")
+    @Override
+    public ResponseEntity<ShippingResponse> updateStatusShipping(@PathVariable Long id, @RequestBody @Valid ShippingStatusUpdateRequest request){
+        ShippingResponse response = service.updateStatusShipping(request, id);
+
+        return ResponseEntity.ok(response);
+    }
 
 
 
