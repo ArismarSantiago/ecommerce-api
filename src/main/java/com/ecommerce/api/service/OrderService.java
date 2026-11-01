@@ -31,13 +31,16 @@ public class OrderService {
     private OrderRepository repository;
 
 
-    private final ReturnTotalValueOrderAndCustomerOrder returnTotalValueOrderAndCustomerOrder;
-    private final CreateShipping createShipping;
-    private final CreateOrderItems orderItems;
+    @Autowired
+    private ReturnTotalValueOrderAndCustomerOrder returnTotalValueOrderAndCustomerOrder;
+    @Autowired
+    private CreateShipping createShipping;
+    @Autowired
+    private CreateOrderItems orderItems;
     @Autowired
     private ApplicationEventPublisher eventPublisher;
     @Autowired
-    private OrderMapper orderMapper;
+    private OrderMapper mapper;
 
     public OrderService(ReturnTotalValueOrderAndCustomerOrder mappingAndReturnOrderItems, CreateShipping createShipping, CreateOrderItems orderItems) {
         this.returnTotalValueOrderAndCustomerOrder = mappingAndReturnOrderItems;
@@ -48,7 +51,7 @@ public class OrderService {
 
     public List<OrderResponse> findAll(){
         return repository.findAll().stream()
-                .map(orderMapper::toResponse).toList();
+                .map(mapper::toResponse).toList();
     }
     public Order findByEntityId(Long id){
         return  repository.findById(id)
@@ -58,14 +61,14 @@ public class OrderService {
 
     public OrderResponse findById(Long id){
         Order order = findByEntityId(id);
-        return orderMapper.toResponse(order);
+        return mapper.toResponse(order);
     }
 
     public List<OrderResponse> findByCreatedDateBetween(LocalDate createdAt){
         LocalDateTime initialDate = createdAt.atStartOfDay();
         LocalDateTime finalDate = createdAt.atTime(LocalTime.MAX);
         return repository.findByCreatedAtBetween(initialDate, finalDate)
-                .stream().map(orderMapper::toResponse)
+                .stream().map(mapper::toResponse)
                 .toList();
     }
 
@@ -85,7 +88,7 @@ public class OrderService {
         eventPublisher.publishEvent(event);
 
         createShipping.createShipping(request.shippingRequest(), order);
-        return orderMapper.toResponse(saveOrder);
+        return mapper.toResponse(saveOrder);
 
     }
 
@@ -94,11 +97,11 @@ public class OrderService {
         if (order.getStatus().equals(request.status())){
             throw new DuplicateExceptions("O status ja esta nessa fase: "+ request.status(), "OrderStatus");
         }
-        Order toEntity = orderMapper.orderUpdateStatus(request, order);
+        Order toEntity = mapper.orderUpdateStatus(request, order);
         repository.save(toEntity);
         OnChangeStatusOrder changeStatus = new OnChangeStatusOrder(order);
         eventPublisher.publishEvent(changeStatus);
-        return orderMapper.toResponse(toEntity);
+        return mapper.toResponse(toEntity);
     }
 
 

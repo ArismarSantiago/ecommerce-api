@@ -18,11 +18,11 @@ public class CategoryService {
     @Autowired
     private CategoryRepository repository;
     @Autowired
-    private CategoryMapper categoryMapper;
+    private CategoryMapper mapper;
 
     public List<CategoryResponse> findAll(){
         return repository.findAll().stream()
-                .map(categoryMapper::toResponse).toList();
+                .map(mapper::toResponse).toList();
     }
 
     public Category findByEntityId(Long id){
@@ -33,7 +33,7 @@ public class CategoryService {
     public CategoryResponse findById(Long id){
         Category category = findByEntityId(id);
 
-        return categoryMapper.toResponse(category);
+        return mapper.toResponse(category);
     }
 
     public CategoryResponse findByName(String name){
@@ -41,7 +41,7 @@ public class CategoryService {
         if (category == null){
             throw new NotFoundExceptions("Nome não localizado",name, "Category");
         }
-        return categoryMapper.toResponse(category);
+        return mapper.toResponse(category);
     }
 
     public CategoryResponse update(CategoryRequest request, Long id){
@@ -49,17 +49,17 @@ public class CategoryService {
         if (repository.existsByName(request.name()) && !request.name().trim().equals(entity.getName().trim())){
             throw new DuplicateExceptions("Essa categoria já se encontra cadastrada", request.name());
         }
-        Category updated = categoryMapper.updateCategory(request);
+        Category updated = mapper.updateCategory(request);
         Category saveUpdate = repository.save(updated);
-        return categoryMapper.toResponse(saveUpdate);
+        return mapper.toResponse(saveUpdate);
     }
 
     public CategoryResponse insert(CategoryRequest request){
         if (repository.existsByName(request.name())){
             throw new DuplicateExceptions("Essa categoria ja existe", request.name());
         }
-        Category entity = categoryMapper.toEntity(request);
+        Category entity = mapper.toEntity(request);
         Category saveEntity = repository.save(entity);
-        return categoryMapper.toResponse(saveEntity);
+        return mapper.toResponse(saveEntity);
     }
 }

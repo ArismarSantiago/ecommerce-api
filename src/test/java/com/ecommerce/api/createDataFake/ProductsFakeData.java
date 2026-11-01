@@ -2,15 +2,16 @@ package com.ecommerce.api.createDataFake;
 
 import com.ecommerce.api.dto.request.ProductRequest;
 import com.ecommerce.api.dto.request.updateRequest.ProductUpdateRequest;
+import com.ecommerce.api.dto.response.ProductResponse;
+import com.ecommerce.api.entity.Category;
 import com.ecommerce.api.entity.Product;
+import com.ecommerce.api.enums.ProductStatus;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductsFakeData {
-
-
 
 
 
@@ -21,8 +22,9 @@ public class ProductsFakeData {
         product.setName(String.valueOf(i + "name"));
         product.setPrice(BigDecimal.valueOf(25));
         product.setDescription("description");
-        product.setCategory(CategoryDataFake.createFackCategory());
+        product.setCategory(new Category(1L, "category", new ArrayList<>()));
         product.setStock(10);
+        product.setStatus(ProductStatus.IN_STOCK);
 
         return product;
     }
@@ -42,5 +44,16 @@ public class ProductsFakeData {
             products.add(productFake(i));
         }
         return products;
+    }
+
+    public static ProductResponse fakeProductResponse(Product product){
+        ProductResponse response = new ProductResponse();
+        response.setName(product.getName());
+        response.setPrice(product.getPrice());
+        response.setId(product.getId());
+        response.setStatus(product.getStatus());
+        response.setDescription(product.getDescription());
+        response.setCategoryName(product.getCategory().getName());
+        return response;
     }
 }
